@@ -28,7 +28,24 @@ function handleSubmit(event) {
             completed: false
         })
     }
+    // else {
+    //     const errorText = document.createElement('span')
+    //     errorText.className = 'error'
+    //     errorText.innerText = 'All fields are required'
+    // }
 }
+
+function handleTodoChange() {
+    const todoID = this.id
+    const completed = this.checked
+
+    console.log(this.id)
+    console.log(this.checked)
+
+    toggleTodoComplete(todoID, completed)
+}
+
+function handleClose() {}
 
 // Basic logic
 function getUserName(userId) {
@@ -39,17 +56,19 @@ function getUserName(userId) {
 function printTodo({id, userId, title, completed}) {
     const li = document.createElement('li')
     li.className = 'todo-item'
-    li.dataset.id = id
-    li.innerHTML = `<label for="${id}">${title} by <b>${getUserName(userId)}</b></label>`
+    // li.dataset.id = id
+    li.innerHTML = `<label for="${id}">${title} by <b>${getUserName(userId)}</b></label for="${id}">`
 
     const status = document.createElement('input')
     status.type = 'checkbox'
     status.checked = completed
     status.id = id
+    status.addEventListener('change', handleTodoChange)
 
     const close = document.createElement('span')
     close.className = 'close'
     close.innerHTML = '&times;'
+    // close.addEventListener('click', handleClose)
 
     todoList.prepend(li)
     li.prepend(status)
@@ -79,11 +98,28 @@ async function createTodo(todo) {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos', {
         method: 'POST',
         body: JSON.stringify(todo),
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         },
     })
     const todoId = await response.json()
-    console.log(todoId)
-    printTodo({id: todoId, ...todo})
+    printTodo({id: todoId.id, ...todo})
+}
+
+async function toggleTodoComplete(todoId, completed){
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({completed: completed}),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+
+    const data = await response.json()
+    console.log(data)
+
+    if (!response.ok){
+        // error
+        // throw new Error
+    }
 }
