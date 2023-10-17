@@ -39,13 +39,23 @@ function handleTodoChange() {
     const todoID = this.id
     const completed = this.checked
 
-    console.log(this.id)
-    console.log(this.checked)
-
     toggleTodoComplete(todoID, completed)
 }
 
-function handleClose() {}
+function handleClose() {
+    const todoId = this.parentElement.dataset.id
+
+    deleteTodo(todoId)
+}
+
+function removeTodoFromDOM(todoId) {
+    todos = todos.filter(todo => todo.id !== todoId)
+
+    const todo = todoList.querySelector(`[data-id = '${todoId}']`)
+    todo.querySelector('.close').removeEventListener('click', handleClose)
+    todo.querySelector('input').removeEventListener('change', handleTodoChange)
+    todo.remove()
+}
 
 // Basic logic
 function getUserName(userId) {
@@ -56,7 +66,7 @@ function getUserName(userId) {
 function printTodo({id, userId, title, completed}) {
     const li = document.createElement('li')
     li.className = 'todo-item'
-    // li.dataset.id = id
+    li.dataset.id = id
     li.innerHTML = `<label for="${id}">${title} by <b>${getUserName(userId)}</b></label for="${id}">`
 
     const status = document.createElement('input')
@@ -68,7 +78,7 @@ function printTodo({id, userId, title, completed}) {
     const close = document.createElement('span')
     close.className = 'close'
     close.innerHTML = '&times;'
-    // close.addEventListener('click', handleClose)
+    close.addEventListener('click', handleClose)
 
     todoList.prepend(li)
     li.prepend(status)
@@ -122,4 +132,18 @@ async function toggleTodoComplete(todoId, completed){
         // error
         // throw new Error
     }
+}
+
+async function deleteTodo(todoId) {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+
+    const data = await response.json()
+    console.log(data)
+
+    if (response.ok) removeTodoFromDOM(todoId)
 }
