@@ -1,11 +1,13 @@
 // Globals
 const todoList = document.getElementById('todo-list')
 const userTodo = document.getElementById('user-todo')
+const form = document.querySelector('form')
 let todos = []
 let users = []
 
 // Event attach
 document.addEventListener('DOMContentLoaded', initApp)
+form.addEventListener('submit', handleSubmit)
 
 // Event logic
 function initApp() {
@@ -15,6 +17,17 @@ function initApp() {
         todos.forEach(todo => printTodo(todo))
         users.forEach(user => printUser(user))
     })
+}
+
+function handleSubmit(event) {
+    event.preventDefault()
+    if (form.todo.value && form.user.value){
+        createTodo({
+            userId: Number(form.user.value),
+            title: form.todo.value,
+            completed: false
+        })
+    }
 }
 
 // Basic logic
@@ -54,14 +67,23 @@ function printUser({id, name}) {
 // Async logic
 async function getAllTodos() {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos')
-    const data = await response.json()
-
-    return data
+    return await response.json()
 }
 
 async function getAllUsers() {
     const response = await fetch('https://jsonplaceholder.typicode.com/users')
-    const data = await response.json()
+    return await response.json()
+}
 
-    return data
+async function createTodo(todo) {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos', {
+        method: 'POST',
+        body: JSON.stringify(todo),
+        header: {
+            'Content-Type': 'application/json'
+        },
+    })
+    const todoId = await response.json()
+    console.log(todoId)
+    printTodo({id: todoId, ...todo})
 }
