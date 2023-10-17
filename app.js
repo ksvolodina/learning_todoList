@@ -56,7 +56,7 @@ function printTodo({id, userId, title, completed}) {
     const li = document.createElement('li')
     li.className = 'todo-item'
     li.dataset.id = id
-    li.innerHTML = `<label for="${id}">${title} by <b>${getUserName(userId)}</b></label for="${id}">`
+    li.innerHTML = `<label for="${id}">${title} by <b>${getUserName(userId)}</b></label>`
 
     const status = document.createElement('input')
     status.type = 'checkbox'
