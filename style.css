@@ -6,7 +6,7 @@ body {
     font-size: 1.2rem;
 }
 header {
-    background-color: mediumorchid;
+    background-color: #0075ff;
     color: white;
     height: 100px;
     padding: 2rem 1rem;
@@ -31,13 +31,13 @@ input[type="text"] {
 }
 form > button {
     cursor: pointer;
-    background-color: mediumorchid;
+    background-color: #0075ff;
     color: white;
     border: none;
-    padding: 0.5rem 0.8rem;
+    padding: 0.6rem 1rem;
 }
 form > button:hover {
-    background-color: violet;
+    background-color: #043772;
 }
 
 ul {
@@ -48,15 +48,30 @@ ul {
 }
 
 .todo-item {
+    border-bottom: 1px solid #ccc;
     display: flex;
+    align-items: center;
     gap: 1rem;
+    justify-content: space-between;
     padding: 0.5rem 0;
 }
+.todo-item label{
+    flex-grow: 2;
+}
 .close {
-    color: red;
+    background: transparent;
+    border: 1px solid #000;
+    color: #555;
     cursor: pointer;
-    font-weight: bolder;
+    font-weight: bold;
+    flex: none;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 20px;
 }
 .close:hover {
-    color:tomato
+    background: #0075ff;
+    border-color: #0075ff;
+    color: #fff;
 }
